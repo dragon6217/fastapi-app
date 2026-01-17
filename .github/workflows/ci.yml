@@ -55,7 +55,9 @@ jobs:
           context: .
           push: true
           # 사용자님의 명명 규칙 적용
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/260118_fastapi-app:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/260118_fastapi-app:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/260118_fastapi-app:${{ github.sha }}
           # 이전 답변에서 설명한 '클라우드 캐시' 설정
           cache-from: type=gha
           cache-to: type=gha,mode=max
