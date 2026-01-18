@@ -61,3 +61,22 @@ jobs:
           # 이전 답변에서 설명한 '클라우드 캐시' 설정
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+
+      # 6-1. 이미지 빌드 및 푸시 이후 단계에 추가
+      - name: Update Kubernetes resources
+        run: |
+          # 6-2. 인프라 저장소 클론 (개인 액세스 토큰 사용 권장)
+          git clone https://${{ secrets.GH_TOKEN }}@github.com/dragon6217/fastapi-infra.git
+          cd fastapi-infra
+          
+          # 6-3. deployment.yaml의 이미지 태그를 현재 커밋 해시로 변경 (sed 활용)
+          # 'image:' 뒤의 값을 현재 GitHub SHA로 교체합니다.
+          sed -i "s|image: dragon6217/260118_fastapi-app:.*|image: dragon6217/260118_fastapi-app:${{ github.sha }}|g" deployment.yaml
+          
+          # 6-4. 변경사항 커밋 및 푸시
+          git config --global user.email "dragon6217@users.noreply.github.com"
+          git config --global user.name "dragon6217"
+          git add deployment.yaml
+          git commit -m "chore: update image tag to ${{ github.sha }}"
+          git push origin main
