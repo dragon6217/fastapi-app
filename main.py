@@ -9,4 +9,4 @@ def read_root():
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id+100, "query": q, "test": "full automation!"}
+    return {"item_id": item_id+100, "query": q, "test": "full automation! - v2"}
